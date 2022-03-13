@@ -4,30 +4,25 @@ import com.example.SpendTrackingApplication.business.ProductService;
 import com.example.SpendTrackingApplication.dao.ProductRepository;
 import com.example.SpendTrackingApplication.entity.Product;
 import com.example.SpendTrackingApplication.request.ProductRequest;
+import com.example.SpendTrackingApplication.response.ProductResponse;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 public class ProductController {
-
     @Autowired
     private ProductService productService;
     @Autowired
     private ProductRepository productRepository;
 
-    @PostMapping("/product")
-    public void add(@RequestBody ProductRequest productRequest) {
-        productService.product(productRequest);
-    }
 
-    @GetMapping("/product")
-    public List<Product> getAll() {
-        List<Product> list = (List<Product>) productRepository.findAll();
+    @GetMapping("/products/{category}")
+    public List<ProductResponse> viewProductsAccToCategory(@PathVariable String category){
+        List<ProductResponse> list=productService.viewProductsAccToCategory(category);
         return list;
     }
 }

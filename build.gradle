@@ -19,6 +19,7 @@ dependencies {
 	implementation "org.springframework.boot:spring-boot-starter-security"
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	//implementation group: 'org.hibernate', name: 'hibernate-validator', version: '7.0.1.Final'
 	//implementation 'org.hibernate:hibernate-core:5.6.5.Final'
 }

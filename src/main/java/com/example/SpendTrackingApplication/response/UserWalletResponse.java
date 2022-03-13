@@ -1,12 +1,13 @@
-package com.example.SpendTrackingApplication.entity;
+package com.example.SpendTrackingApplication.response;
 
-import javax.persistence.*;
+import com.example.SpendTrackingApplication.entity.User;
+import com.example.SpendTrackingApplication.entity.Wallet;
 
-@Entity
-@Table(name = "user_wallet")
-public class UserWallet {
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
-    @Id
+public class UserWalletResponse {
     String id;
     String balance;
 

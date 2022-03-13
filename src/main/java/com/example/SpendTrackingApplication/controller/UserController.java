@@ -1,25 +1,20 @@
 package com.example.SpendTrackingApplication.controller;
 
-import com.example.SpendTrackingApplication.business.RegistrationService;
+import com.example.SpendTrackingApplication.business.PurchaseService;
 import com.example.SpendTrackingApplication.business.UserService;
 import com.example.SpendTrackingApplication.dao.UserRepository;
-import com.example.SpendTrackingApplication.entity.User;
-import com.example.SpendTrackingApplication.entity.UserWallet;
+import com.example.SpendTrackingApplication.model.Purchase;
+import com.example.SpendTrackingApplication.request.PurchaseRequest;
 import com.example.SpendTrackingApplication.request.RegistrationRequest;
-import com.example.SpendTrackingApplication.response.UserResponse;
-import org.springframework.beans.BeanUtils;
+import com.example.SpendTrackingApplication.response.UserWalletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.xml.bind.ValidationException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class UserController {
-
-    @Autowired
-    private RegistrationService registrationService;
 
     @Autowired
     private UserService userService;
@@ -27,39 +22,36 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping("/registration")
-    public void register(@RequestBody RegistrationRequest registrationRequest) {
-        registrationService.register(registrationRequest);
-    }
-
-    /*@GetMapping("/user/registration")
-    public List<User> registrationRequest(){
-        List<User> list=(List<User>) userRepository.findAll();
-        return list;
-    }*/
-
-
-    @GetMapping("/user/registration")
-    public List<UserResponse> getUsers(){
-        List<UserResponse> list= new ArrayList<>();
-        List<User> response= (List<User>) userRepository.findAll();
-        response.forEach(element -> {
-            UserResponse userResponse= new UserResponse();
-            BeanUtils.copyProperties(element, userResponse);
-            list.add(userResponse);
-        });
-        return list;
-    }
+    @Autowired
+    private PurchaseService purchaseService;
 
     @PutMapping("/user/update/{username}")
     public void updateProfile(@RequestBody RegistrationRequest registrationRequest,@PathVariable String username ) throws ValidationException {
         userService.updateProfile(registrationRequest,username);
     }
 
-    @GetMapping("/user/viewWallet")
-    public void viewWallets(){
-       userService.viewWallet();
+    @GetMapping("/user/balance/{id}")
+    public UserWalletResponse viewWallet(@PathVariable(name = "id") String id) {
+        return userService.viewWallet(id);
     }
 
+    @PostMapping(value = "/madePurchases")
+    public String madePurchase(@RequestBody PurchaseRequest purchaseRequest)
+    {
+        purchaseService.madePurchase( purchaseRequest);
+        return "New Purchase is made";
+    }
 
+//    @GetMapping("user/viewPurchases/{purchaseId}")
+//    public PurchaseResponse viewPurchaseById(@RequestParam(value = "purchaseId") String purchaseId){
+//        PurchaseResponse purchaseResponse=userService.viewPurchase(purchaseId);
+//        return purchaseResponse;
+//    }
+
+
+    @GetMapping("user/viewPurchases/{purchaseId}")
+    public Optional<Purchase> viewPurchaseById(@RequestParam(value = "purchaseId") String purchaseId){
+        Optional<Purchase> purchase=userService.viewPurchase(purchaseId);
+        return purchase;
+    }
 }

@@ -4,13 +4,15 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "product_stock")
-public class ProductStock {
+public class ProductStock extends ParentEntity {
 
     @Id
     private String id;
     private String quantity;
-    private String createDate;
-    private String updateDate;
+
+    @OneToOne
+    @JoinColumn(name = "PRODUCT_ID")
+    private Product product;
 
     public Product getProduct() {
         return product;
@@ -19,10 +21,6 @@ public class ProductStock {
     public void setProduct(Product product) {
         this.product = product;
     }
-
-    @OneToOne
-    @JoinColumn(name = "PRODUCT_ID")
-    private Product product;
 
     public String getId() {
         return id;
@@ -38,22 +36,6 @@ public class ProductStock {
 
     public void setQuantity(String quantity) {
         this.quantity = quantity;
-    }
-
-    public String getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(String createDate) {
-        this.createDate = createDate;
-    }
-
-    public String getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(String updateDate) {
-        this.updateDate = updateDate;
     }
 
 }
